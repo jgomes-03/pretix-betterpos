@@ -17,7 +17,8 @@ class PublicBuyView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         event = self.request.event
+        base_path = self.request.path.rstrip('/') or self.request.path
         context['event'] = event
-        context['base_path'] = f'/{event.organizer.slug}/{event.slug}/buy'
-        context['api_base'] = f'/{event.organizer.slug}/{event.slug}/buy/api'
+        context['base_path'] = base_path
+        context['api_base'] = f'{base_path}/api'
         return context

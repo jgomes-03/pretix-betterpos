@@ -6,7 +6,11 @@
 .betterpos-admin-wrapper {
   display: flex;
   min-height: 100vh;
-  background: linear-gradient(160deg, #f0f5fc 0%, #e6eef9 100%);
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--pos-brand, #123f79) 6%, #fff) 0%,
+    color-mix(in srgb, var(--pos-accent, #1f6fb2) 8%, #fff) 100%
+  );
 }
 
 .betterpos-sidebar {

@@ -145,10 +145,12 @@ function applyBrandColors(config: PublicConfig): void {
   if (primary) {
     rootStyle.setProperty('--color-primary', primary);
     rootStyle.setProperty('--pos-brand', primary);
+    rootStyle.setProperty('--pos-brand-2', primary);
   }
   if (secondary) {
     rootStyle.setProperty('--color-secondary', secondary);
     rootStyle.setProperty('--pos-accent', secondary);
+    rootStyle.setProperty('--pos-accent-2', secondary);
   }
 }
 
@@ -225,8 +227,8 @@ async function apiFetch<T>(config: PublicConfig, url: string, options?: RequestI
 function SelfserviceApp({ config }: { config: PublicConfig }) {
   const lang: UILang = typeof navigator !== 'undefined' && navigator.language.toLowerCase().startsWith('pt') ? 'pt' : 'en';
   const t = (key: string) => uiText[lang][key] || key;
-  const eventTitle = (config.organizerName || '').trim() || (config.eventName || '').trim() || t('title');
-  const eventSubtitle = (config.eventName || '').trim() || t('subtitle');
+  const eventTitle = (config.eventName || '').trim() || (config.organizerName || '').trim() || t('title');
+  const eventSubtitle = (config.organizerName || '').trim() || t('subtitle');
   const brandLogoUrl = (config.organizerLogoUrl || '').trim();
   const pendingStorageKey = useMemo(() => getPendingStorageKey(config), [config]);
 

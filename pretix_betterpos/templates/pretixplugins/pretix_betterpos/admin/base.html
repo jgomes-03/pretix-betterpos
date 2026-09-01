@@ -2,12 +2,25 @@
 {% load i18n static %}
 
 {% block content %}
-<div class="betterpos-admin-wrapper">
+{% firstof event.organizer.settings.primary_color event.settings.primary_color '' as brand_primary %}
+{% firstof event.organizer.settings.accent_color event.settings.accent_color '' as brand_accent %}
+<div
+    class="betterpos-admin-wrapper"
+    {% if brand_primary or brand_accent %}
+    style="{% if brand_primary %}--color-primary: {{ brand_primary }}; --pos-brand: {{ brand_primary }};{% endif %}{% if brand_accent %}--color-secondary: {{ brand_accent }}; --pos-accent: {{ brand_accent }};{% endif %}"
+    {% endif %}
+>
     <!-- Sidebar Navigation -->
     <aside class="betterpos-sidebar">
         <div class="sidebar-header">
-            <h3>{% trans "NET BetterPOS" %}</h3>
-            <p class="sidebar-subtitle">{% trans "NET-ISCTE Management" %}</p>
+            <div class="sidebar-brand">
+                {% firstof event.organizer.logo_image.url event.organizer.settings.logo_image event.settings.logo_image '' as organizer_logo %}
+                {% if organizer_logo %}
+                    <img src="{{ organizer_logo }}" alt="{{ event.organizer.name }}" class="sidebar-brand-logo">
+                {% endif %}
+                <h3>{{ event.organizer.name|default:event.organizer.slug }} BetterPOS</h3>
+            </div>
+            <p class="sidebar-subtitle">{{ event.name }}</p>
         </div>
         
         <nav class="sidebar-nav">

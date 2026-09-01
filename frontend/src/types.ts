@@ -7,10 +7,15 @@ export interface BetterPOSPermissions {
 
 export interface BetterPOSConfig {
   organizer: string;
+  organizerName?: string;
+  organizerLogoUrl?: string;
   event: string;
+  eventName?: string;
   basePath: string;
   apiBase: string;
   csrfToken?: string;
+  brandPrimaryColor?: string;
+  brandSecondaryColor?: string;
   permissions: BetterPOSPermissions;
 }
 

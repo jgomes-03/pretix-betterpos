@@ -10,13 +10,21 @@
     <link rel="stylesheet" href="{% static 'pretixplugins/pretix_betterpos/admin.css' %}">
 </head>
 <body>
+  {% firstof event.organizer.logo_image.url event.organizer.settings.logo_image event.settings.logo_image '' as organizer_logo %}
+  {% firstof event.organizer.settings.primary_color event.settings.primary_color '' as brand_primary %}
+  {% firstof event.organizer.settings.accent_color event.settings.accent_color '' as brand_accent %}
   <div
     id="betterpos-app"
     data-organizer="{{ event.organizer.slug }}"
+    data-organizer-name="{{ event.organizer.name|default:event.organizer.slug }}"
+    data-organizer-logo-url="{{ organizer_logo }}"
     data-event="{{ event.slug }}"
+    data-event-name="{{ event.name }}"
     data-base-path="{{ base_path }}"
     data-api-base="{{ api_base }}"
     data-csrf-token="{{ csrf_token }}"
+    data-brand-primary-color="{{ brand_primary }}"
+    data-brand-secondary-color="{{ brand_accent }}"
     data-can-manage-registers="{{ can_manage_registers|yesno:'true,false' }}"
     data-can-view-audit="{{ can_view_audit|yesno:'true,false' }}"
     data-can-session-control="{{ can_session_control|yesno:'true,false' }}"
@@ -26,10 +34,15 @@
     <script>
       window.BETTERPOS = {
         organizer: '{{ event.organizer.slug }}',
+        organizerName: '{{ event.organizer.name|escapejs }}',
+        organizerLogoUrl: '{{ organizer_logo|escapejs }}',
         event: '{{ event.slug }}',
+        eventName: '{{ event.name|escapejs }}',
         basePath: '{{ base_path }}',
         apiBase: '{{ api_base }}',
         csrfToken: '{{ csrf_token }}',
+        brandPrimaryColor: '{{ brand_primary|escapejs }}',
+        brandSecondaryColor: '{{ brand_accent|escapejs }}',
         permissions: {
           canManageRegisters: {{ can_manage_registers|yesno:'true,false' }},
           canViewAudit: {{ can_view_audit|yesno:'true,false' }},

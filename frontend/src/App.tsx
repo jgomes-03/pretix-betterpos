@@ -396,6 +396,7 @@ function POSScreen({
 	t: (key: string, vars?: Record<string, string | number>) => string;
 }) {
 	const api = useMemo(() => createApi(config), [config]);
+	const canSessionControl = config.permissions.canSessionControl;
 	const [registers, setRegisters] = useState<Register[]>([]);
 	const [selectedRegister, setSelectedRegister] = useState<Register | null>(null);
 	const [session, setSession] = useState<Session | null>(null);
@@ -703,15 +704,17 @@ function POSScreen({
 							</option>
 						))}
 					</select>{' '}
-					{session ? (
-						<button className="session-btn session-btn-close" onClick={closeSession} disabled={loading || isPaymentPending}>
-							{t('closeSession')}
-						</button>
-					) : (
-						<button className="session-btn session-btn-open" onClick={openSession} disabled={!selectedRegister || loading || isPaymentPending}>
-							{t('openSession')}
-						</button>
-					)}
+					{canSessionControl ? (
+						session ? (
+							<button className="session-btn session-btn-close" onClick={closeSession} disabled={loading || isPaymentPending}>
+								{t('closeSession')}
+							</button>
+						) : (
+							<button className="session-btn session-btn-open" onClick={openSession} disabled={!selectedRegister || loading || isPaymentPending}>
+								{t('openSession')}
+							</button>
+						)
+					) : null}
 				</div>
 			</div>
 

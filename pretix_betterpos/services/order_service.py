@@ -151,15 +151,18 @@ class OrderOrchestrationService:
         )
 
         created_positions = []
-        for idx, line in enumerate(cart_totals['lines'], start=1):
-            pos = OrderPosition.objects.create(
-                order=order,
-                item_id=line['item_id'],
-                variation_id=line['variation_id'],
-                price=line['unit_price'],
-                positionid=idx,
-            )
-            created_positions.append(pos)
+        position_id = 1
+        for line in cart_totals['lines']:
+            for _ in range(line['quantity']):
+                pos = OrderPosition.objects.create(
+                    order=order,
+                    item_id=line['item_id'],
+                    variation_id=line['variation_id'],
+                    price=line['unit_price'],
+                    positionid=position_id,
+                )
+                created_positions.append(pos)
+                position_id += 1
 
         order.total = (order.positions.aggregate(sum=Sum('price'))['sum'] or 0) + (
             order.fees.aggregate(sum=Sum('value'))['sum'] or 0

@@ -259,3 +259,25 @@ class TestAPINamespaceRouting:
         assert shell_match.view_name == "plugins:pretix_betterpos:pos.index"
         # API match should NOT be pos.index
         assert api_match.view_name != "plugins:pretix_betterpos:pos.index"
+
+
+class TestPublicBuyRouting:
+    """Validate public self-service buy page context values."""
+
+    def test_public_buy_uses_request_path_for_api_base(self, client, organizer, event):
+        event.settings.set("betterpos_selfservice_enabled", True)
+        url = reverse(
+            "plugins:pretix_betterpos:public.buy",
+            kwargs={
+                "organizer": organizer.slug,
+                "event": event.slug,
+            },
+        )
+
+        response = client.get(url)
+
+        assert response.status_code == 200
+        content = response.content.decode()
+        expected_base_path = url.rstrip("/")
+        assert f"basePath: '{expected_base_path}'" in content
+        assert f"apiBase: '{expected_base_path}/api'" in content

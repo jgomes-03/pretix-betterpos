@@ -39,10 +39,15 @@ export function normalizeConfig(): BetterPOSConfig {
   const cfg: Partial<BetterPOSConfig> = window.BETTERPOS || {};
 
   if (isMissing(cfg.organizer) && !isMissing(ds.organizer)) cfg.organizer = ds.organizer;
+  if (isMissing(cfg.organizerName) && !isMissing(ds.organizerName)) cfg.organizerName = ds.organizerName;
+  if (isMissing(cfg.organizerLogoUrl) && !isMissing(ds.organizerLogoUrl)) cfg.organizerLogoUrl = ds.organizerLogoUrl;
   if (isMissing(cfg.event) && !isMissing(ds.event)) cfg.event = ds.event;
+  if (isMissing(cfg.eventName) && !isMissing(ds.eventName)) cfg.eventName = ds.eventName;
   if (isMissing(cfg.basePath) && !isMissing(ds.basePath)) cfg.basePath = ds.basePath;
   if (isMissing(cfg.apiBase) && !isMissing(ds.apiBase)) cfg.apiBase = ds.apiBase;
   if (isMissing(cfg.csrfToken) && !isMissing(ds.csrfToken)) cfg.csrfToken = ds.csrfToken;
+  if (isMissing(cfg.brandPrimaryColor) && !isMissing(ds.brandPrimaryColor)) cfg.brandPrimaryColor = ds.brandPrimaryColor;
+  if (isMissing(cfg.brandSecondaryColor) && !isMissing(ds.brandSecondaryColor)) cfg.brandSecondaryColor = ds.brandSecondaryColor;
 
   const parsed = parseEventContextFromPath(window.location.pathname);
   if (parsed) {
@@ -68,10 +73,15 @@ export function normalizeConfig(): BetterPOSConfig {
 
   return {
     organizer: String(cfg.organizer || ''),
+    organizerName: isMissing(cfg.organizerName) ? undefined : String(cfg.organizerName),
+    organizerLogoUrl: isMissing(cfg.organizerLogoUrl) ? undefined : String(cfg.organizerLogoUrl),
     event: String(cfg.event || ''),
+    eventName: isMissing(cfg.eventName) ? undefined : String(cfg.eventName),
     basePath: String(cfg.basePath || ''),
     apiBase: String(cfg.apiBase || ''),
     csrfToken: isMissing(cfg.csrfToken) ? undefined : String(cfg.csrfToken),
+    brandPrimaryColor: isMissing(cfg.brandPrimaryColor) ? undefined : String(cfg.brandPrimaryColor),
+    brandSecondaryColor: isMissing(cfg.brandSecondaryColor) ? undefined : String(cfg.brandSecondaryColor),
     permissions: {
       canManageRegisters: asBool(cfg.permissions.canManageRegisters),
       canViewAudit: asBool(cfg.permissions.canViewAudit),

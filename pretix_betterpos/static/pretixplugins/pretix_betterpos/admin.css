@@ -13,7 +13,7 @@
   width: 272px;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #0c2d58 0%, #123f79 55%, #195695 100%);
+  background: linear-gradient(180deg, var(--pos-brand-2, #0c2d58) 0%, var(--pos-brand, #123f79) 55%, var(--pos-accent, #195695) 100%);
   color: #fff;
   border-right: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 8px 0 22px rgba(9, 33, 61, 0.2);
@@ -22,6 +22,21 @@
 .sidebar-header {
   padding: 24px 20px 18px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-brand-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: var(--border-radius-sm);
+  background: rgba(255, 255, 255, 0.12);
+  padding: 3px;
 }
 
 .sidebar-header h3 {

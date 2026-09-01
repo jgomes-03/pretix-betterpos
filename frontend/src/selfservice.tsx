@@ -78,11 +78,15 @@ const CHECKOUT_TIMEOUT_SECONDS = 300;
 
 interface PublicConfig {
   organizer: string;
+  organizerName?: string;
+  organizerLogoUrl?: string;
   event: string;
   eventName?: string;
   basePath: string;
   apiBase: string;
   csrfToken?: string;
+  brandPrimaryColor?: string;
+  brandSecondaryColor?: string;
 }
 
 declare global {
@@ -134,17 +138,35 @@ function getMountNode(): HTMLElement | null {
   return document.getElementById('betterpos-selfservice-app');
 }
 
+function applyBrandColors(config: PublicConfig): void {
+  const primary = (config.brandPrimaryColor || '').trim();
+  const secondary = (config.brandSecondaryColor || '').trim();
+  const rootStyle = document.documentElement.style;
+  if (primary) {
+    rootStyle.setProperty('--color-primary', primary);
+    rootStyle.setProperty('--pos-brand', primary);
+  }
+  if (secondary) {
+    rootStyle.setProperty('--color-secondary', secondary);
+    rootStyle.setProperty('--pos-accent', secondary);
+  }
+}
+
 function getConfig(): PublicConfig {
   const mount = getMountNode();
   const ds = mount?.dataset || {};
   const cfg = window.BETTERPOS_SELF || {};
   return {
     organizer: String(cfg.organizer || ds.organizer || ''),
+    organizerName: String(cfg.organizerName || ds.organizerName || ''),
+    organizerLogoUrl: String(cfg.organizerLogoUrl || ds.organizerLogoUrl || ''),
     event: String(cfg.event || ds.event || ''),
     eventName: String(cfg.eventName || ds.eventName || ''),
     basePath: String(cfg.basePath || ds.basePath || ''),
     apiBase: String(cfg.apiBase || ds.apiBase || ''),
     csrfToken: String(cfg.csrfToken || ds.csrfToken || ''),
+    brandPrimaryColor: String(cfg.brandPrimaryColor || ds.brandPrimaryColor || ''),
+    brandSecondaryColor: String(cfg.brandSecondaryColor || ds.brandSecondaryColor || ''),
   };
 }
 
@@ -203,7 +225,9 @@ async function apiFetch<T>(config: PublicConfig, url: string, options?: RequestI
 function SelfserviceApp({ config }: { config: PublicConfig }) {
   const lang: UILang = typeof navigator !== 'undefined' && navigator.language.toLowerCase().startsWith('pt') ? 'pt' : 'en';
   const t = (key: string) => uiText[lang][key] || key;
-  const eventTitle = (config.eventName || '').trim() || t('title');
+  const eventTitle = (config.organizerName || '').trim() || (config.eventName || '').trim() || t('title');
+  const eventSubtitle = (config.eventName || '').trim() || t('subtitle');
+  const brandLogoUrl = (config.organizerLogoUrl || '').trim();
   const pendingStorageKey = useMemo(() => getPendingStorageKey(config), [config]);
 
   const [catalog, setCatalog] = useState<CatalogItem[]>([]);
@@ -217,6 +241,10 @@ function SelfserviceApp({ config }: { config: PublicConfig }) {
   const [remainingSeconds, setRemainingSeconds] = useState<number>(CHECKOUT_TIMEOUT_SECONDS);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    applyBrandColors(config);
+  }, [config]);
 
   const total = useMemo(() => cart.reduce((acc, line) => acc + line.price * line.qty, 0), [cart]);
 
@@ -422,8 +450,11 @@ function SelfserviceApp({ config }: { config: PublicConfig }) {
     <div className="betterpos-container">
       <header className="betterpos-header">
         <div className="header-brand">
+          {brandLogoUrl ? <img src={brandLogoUrl} alt={eventTitle} className="header-brand-logo" /> : null}
+          <div>
           <h1>{eventTitle}</h1>
-          <p>{t('subtitle')}</p>
+          <p>{eventSubtitle}</p>
+          </div>
         </div>
       </header>
 

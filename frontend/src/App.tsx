@@ -20,8 +20,8 @@ type UILang = 'pt' | 'en';
 
 const uiText: Record<UILang, Record<string, string>> = {
 	pt: {
-		brandTitle: 'NET BetterPOS',
-		brandSubtitle: 'NET-ISCTE cashless and cash desk',
+		brandTitle: 'BetterPOS',
+		brandSubtitle: 'Cashless e ponto de venda',
 		navPos: 'Frente de Caixa',
 		navAdmin: 'Gestao',
 		langToggle: 'EN',
@@ -109,8 +109,8 @@ const uiText: Record<UILang, Record<string, string>> = {
 		stateRefund: 'Reembolso',
 	},
 	en: {
-		brandTitle: 'NET BetterPOS',
-		brandSubtitle: 'NET-ISCTE cashless and cash desk',
+		brandTitle: 'BetterPOS',
+		brandSubtitle: 'Cashless and point of sale',
 		navPos: 'Checkout',
 		navAdmin: 'Management',
 		langToggle: 'PT',
@@ -222,6 +222,21 @@ function formatDateValue(value: string): string {
 	return dt.toLocaleString();
 }
 
+function applyBrandColors(config: BetterPOSConfig): void {
+	if (typeof document === 'undefined') return;
+	const rootStyle = document.documentElement.style;
+	const primary = (config.brandPrimaryColor || '').trim();
+	const secondary = (config.brandSecondaryColor || '').trim();
+	if (primary) {
+		rootStyle.setProperty('--color-primary', primary);
+		rootStyle.setProperty('--pos-brand', primary);
+	}
+	if (secondary) {
+		rootStyle.setProperty('--color-secondary', secondary);
+		rootStyle.setProperty('--pos-accent', secondary);
+	}
+}
+
 function stateBadgeClass(rawValue: string): string {
 	const v = rawValue.toLowerCase();
 	if (v.includes('paid')) return 'status-badge status-paid';
@@ -318,20 +333,29 @@ function AppHeader({
 	navigate,
 	route,
 	t,
+	brandTitle,
+	brandSubtitle,
+	brandLogoUrl,
 	onToggleLang,
 }: {
 	canAdmin: boolean;
 	navigate: (route: string) => void;
 	route: string;
 	t: (key: string, vars?: Record<string, string | number>) => string;
+	brandTitle: string;
+	brandSubtitle: string;
+	brandLogoUrl?: string;
 	onToggleLang: () => void;
 }) {
 	const inAdmin = route.startsWith('/admin');
 	return (
 		<header className="betterpos-header">
 			<div className="header-brand">
-				<h1>{t('brandTitle')}</h1>
-				<p>{t('brandSubtitle')}</p>
+				{brandLogoUrl ? <img src={brandLogoUrl} alt={brandTitle} className="header-brand-logo" /> : null}
+				<div>
+					<h1>{brandTitle || t('brandTitle')}</h1>
+					<p>{brandSubtitle || t('brandSubtitle')}</p>
+				</div>
 			</div>
 			<nav className="header-nav">
 				<a
@@ -1351,6 +1375,14 @@ export default function App({ config }: AppProps) {
 		}
 	}, [canAdmin, navigate, route]);
 
+	useEffect(() => {
+		applyBrandColors(config);
+	}, [config]);
+
+	const brandTitle = (config.organizerName || '').trim() || t('brandTitle');
+	const brandSubtitle = (config.eventName || '').trim() || t('brandSubtitle');
+	const brandLogoUrl = (config.organizerLogoUrl || '').trim() || undefined;
+
 	return (
 		<div className="betterpos-container">
 			<AppHeader
@@ -1358,6 +1390,9 @@ export default function App({ config }: AppProps) {
 				canAdmin={canAdmin}
 				route={route}
 				t={t}
+				brandTitle={brandTitle}
+				brandSubtitle={brandSubtitle}
+				brandLogoUrl={brandLogoUrl}
 				onToggleLang={() => setLang((old) => (old === 'pt' ? 'en' : 'pt'))}
 			/>
 			{route.startsWith('/admin') ? (

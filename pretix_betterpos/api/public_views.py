@@ -87,7 +87,7 @@ class PublicCheckoutStartView(BasePublicApiView):
                 event=self.event,
                 cart_totals=cart_totals,
                 phone=payload.get('phone'),
-                locale=payload.get('locale', 'en'),
+                locale=payload.get('locale', 'pt-pt'),
                 provider='eupago_mbway',
             )
             return JsonResponse(

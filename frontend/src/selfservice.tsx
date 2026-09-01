@@ -225,7 +225,7 @@ async function apiFetch<T>(config: PublicConfig, url: string, options?: RequestI
 }
 
 function SelfserviceApp({ config }: { config: PublicConfig }) {
-  const lang: UILang = typeof navigator !== 'undefined' && navigator.language.toLowerCase().startsWith('pt') ? 'pt' : 'en';
+  const lang: UILang = 'pt';
   const t = (key: string) => uiText[lang][key] || key;
   const eventTitle = (config.eventName || '').trim() || (config.organizerName || '').trim() || t('title');
   const eventSubtitle = (config.organizerName || '').trim() || t('subtitle');

@@ -46,7 +46,7 @@ class SelfserviceCheckoutService:
 
     @staticmethod
     @transaction.atomic
-    def start_checkout(*, request, event, cart_totals, phone, locale='en', provider='eupago_mbway'):
+    def start_checkout(*, request, event, cart_totals, phone, locale='pt-pt', provider='eupago_mbway'):
         if not cart_totals.get('lines'):
             raise ValidationError('Cart is empty')
         normalized_phone = SelfserviceCheckoutService._normalize_phone(event, phone)

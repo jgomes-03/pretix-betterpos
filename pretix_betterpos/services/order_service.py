@@ -16,20 +16,24 @@ class OrderOrchestrationService:
     def _normalize_order_locale(locale):
         raw_locale = str(locale or '').strip().lower().replace('_', '-')
         available_locales = dict(settings.LANGUAGES)
+        default_locale = 'pt-pt' if 'pt-pt' in available_locales else 'pt' if 'pt' in available_locales else 'en'
 
         if raw_locale in available_locales:
             return raw_locale
 
         if raw_locale == 'pt':
-            return 'pt-pt' if 'pt-pt' in available_locales else 'pt'
+            return default_locale
 
         if raw_locale.startswith('pt-') and 'pt-pt' in available_locales:
             return 'pt-pt'
 
-        if not raw_locale:
-            return 'en'
+        if raw_locale.startswith('pt-') and 'pt' in available_locales:
+            return 'pt'
 
-        return raw_locale if raw_locale in available_locales else 'en'
+        if not raw_locale:
+            return default_locale
+
+        return raw_locale if raw_locale in available_locales else default_locale
 
     @staticmethod
     def _normalize_order_phone(event, phone):
@@ -92,7 +96,7 @@ class OrderOrchestrationService:
 
     @staticmethod
     @transaction.atomic
-    def create_order_from_cart(*, event, user, register, session, cart_totals, locale='en', phone=None):
+    def create_order_from_cart(*, event, user, register, session, cart_totals, locale='pt-pt', phone=None):
         if not session or session.status != session.STATUS_OPEN:
             raise ValidationError('An open cash session is required before selling')
 

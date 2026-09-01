@@ -200,10 +200,7 @@ const uiText: Record<UILang, Record<string, string>> = {
 };
 
 function initialLang(): UILang {
-	if (typeof navigator !== 'undefined' && (navigator.language || '').toLowerCase().startsWith('pt')) {
-		return 'pt';
-	}
-	return 'en';
+	return 'pt';
 }
 
 function toMoney(value: number | string): string {

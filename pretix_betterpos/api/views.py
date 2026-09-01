@@ -295,7 +295,7 @@ class CreateOrderView(BasePOSApiView):
                 register=register,
                 session=session,
                 cart_totals=cart_totals,
-                locale=payload.get('locale', 'en'),
+                locale=payload.get('locale', 'pt-pt'),
                 phone=payload.get('phone'),
             )
             if idempotency_key:

@@ -230,10 +230,12 @@ function applyBrandColors(config: BetterPOSConfig): void {
 	if (primary) {
 		rootStyle.setProperty('--color-primary', primary);
 		rootStyle.setProperty('--pos-brand', primary);
+		rootStyle.setProperty('--pos-brand-2', primary);
 	}
 	if (secondary) {
 		rootStyle.setProperty('--color-secondary', secondary);
 		rootStyle.setProperty('--pos-accent', secondary);
+		rootStyle.setProperty('--pos-accent-2', secondary);
 	}
 }
 
@@ -1379,8 +1381,8 @@ export default function App({ config }: AppProps) {
 		applyBrandColors(config);
 	}, [config]);
 
-	const brandTitle = (config.organizerName || '').trim() || t('brandTitle');
-	const brandSubtitle = (config.eventName || '').trim() || t('brandSubtitle');
+	const brandTitle = (config.eventName || '').trim() || t('brandTitle');
+	const brandSubtitle = (config.organizerName || '').trim() || t('brandSubtitle');
 	const brandLogoUrl = (config.organizerLogoUrl || '').trim() || undefined;
 
 	return (

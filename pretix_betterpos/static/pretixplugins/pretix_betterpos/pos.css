@@ -24,8 +24,8 @@
   position: relative;
   overflow-x: clip;
   background:
-    radial-gradient(circle at 0% -5%, rgba(18, 63, 121, 0.2), transparent 30%),
-    radial-gradient(circle at 110% 110%, rgba(42, 162, 219, 0.12), transparent 45%),
+    radial-gradient(circle at 0% -5%, color-mix(in srgb, var(--pos-brand) 20%, transparent), transparent 30%),
+    radial-gradient(circle at 110% 110%, color-mix(in srgb, var(--pos-accent) 12%, transparent), transparent 45%),
     var(--pos-bg);
 }
 
@@ -37,7 +37,11 @@
   width: 320px;
   height: 320px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(25, 103, 174, 0.28), rgba(25, 103, 174, 0.02));
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in srgb, var(--pos-brand) 28%, transparent),
+    color-mix(in srgb, var(--pos-brand) 2%, transparent)
+  );
   pointer-events: none;
   z-index: 0;
 }
@@ -46,7 +50,11 @@
   inset: 72px -130px auto auto;
   width: 260px;
   height: 260px;
-  background: radial-gradient(circle at 40% 40%, rgba(42, 162, 219, 0.25), rgba(42, 162, 219, 0.02));
+  background: radial-gradient(
+    circle at 40% 40%,
+    color-mix(in srgb, var(--pos-accent) 25%, transparent),
+    color-mix(in srgb, var(--pos-accent) 2%, transparent)
+  );
 }
 
 .betterpos-header {

@@ -7,7 +7,7 @@
 <div
     class="betterpos-admin-wrapper"
     {% if brand_primary or brand_accent %}
-    style="{% if brand_primary %}--color-primary: {{ brand_primary }}; --pos-brand: {{ brand_primary }};{% endif %}{% if brand_accent %}--color-secondary: {{ brand_accent }}; --pos-accent: {{ brand_accent }};{% endif %}"
+    style="{% if brand_primary %}--color-primary: {{ brand_primary }}; --pos-brand: {{ brand_primary }}; --pos-brand-2: {{ brand_primary }};{% endif %}{% if brand_accent %}--color-secondary: {{ brand_accent }}; --pos-accent: {{ brand_accent }}; --pos-accent-2: {{ brand_accent }};{% endif %}"
     {% endif %}
 >
     <!-- Sidebar Navigation -->
@@ -18,9 +18,9 @@
                 {% if organizer_logo %}
                     <img src="{{ organizer_logo }}" alt="{{ event.organizer.name }}" class="sidebar-brand-logo">
                 {% endif %}
-                <h3>{{ event.organizer.name|default:event.organizer.slug }} BetterPOS</h3>
+                <h3>{{ event.name }}</h3>
             </div>
-            <p class="sidebar-subtitle">{{ event.name }}</p>
+            <p class="sidebar-subtitle">{{ event.organizer.name|default:event.organizer.slug }}</p>
         </div>
         
         <nav class="sidebar-nav">

@@ -64,16 +64,19 @@ class SelfserviceCheckoutService:
         )
 
         created_positions = []
-        for idx, line in enumerate(cart_totals['lines'], start=1):
+        position_id = 1
+        for line in cart_totals['lines']:
             item = Item.objects.get(event=event, pk=line['item_id'])
-            pos = OrderPosition.objects.create(
-                order=order,
-                item=item,
-                variation_id=line.get('variation_id'),
-                price=line['unit_price'],
-                positionid=idx,
-            )
-            created_positions.append(pos)
+            for _ in range(line['quantity']):
+                pos = OrderPosition.objects.create(
+                    order=order,
+                    item=item,
+                    variation_id=line.get('variation_id'),
+                    price=line['unit_price'],
+                    positionid=position_id,
+                )
+                created_positions.append(pos)
+                position_id += 1
 
         order.total = (order.positions.aggregate(sum=Sum('price'))['sum'] or 0) + (
             order.fees.aggregate(sum=Sum('value'))['sum'] or 0

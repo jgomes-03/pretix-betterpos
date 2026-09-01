@@ -3,13 +3,13 @@ from pretix.base.models import Event
 
 FALLBACK_TEAM_PERMISSIONS = {
     'can_view_pos': ('can_view_orders', 'can_change_orders', 'can_change_event_settings'),
-    'can_sell_pos': ('can_change_orders',),
-    'can_discount_pos': ('can_change_orders',),
-    'can_cancel_unpaid_pos': ('can_change_orders',),
-    'can_refund_pos': ('can_change_orders',),
-    'can_cash_move_pos': ('can_change_orders',),
-    'can_session_control_pos': ('can_change_orders',),
-    'can_reconcile_pos': ('can_change_orders',),
+    'can_sell_pos': ('can_view_orders', 'can_change_orders', 'can_change_event_settings'),
+    'can_discount_pos': ('can_change_orders', 'can_change_event_settings'),
+    'can_cancel_unpaid_pos': ('can_change_orders', 'can_change_event_settings'),
+    'can_refund_pos': ('can_change_orders', 'can_change_event_settings'),
+    'can_cash_move_pos': ('can_change_orders', 'can_change_event_settings'),
+    'can_session_control_pos': ('can_change_orders', 'can_change_event_settings'),
+    'can_reconcile_pos': ('can_change_orders', 'can_change_event_settings'),
     'can_manage_registers_pos': ('can_change_event_settings',),
     'can_view_audit_pos': ('can_view_orders', 'can_change_orders', 'can_change_event_settings'),
 }

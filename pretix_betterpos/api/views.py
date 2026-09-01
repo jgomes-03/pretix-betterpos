@@ -586,6 +586,8 @@ class RefundOrderView(BasePOSApiView):
 class RegistersListView(BasePOSApiView):
     def get(self, request, *args, **kwargs):
         registers = BetterposRegister.objects.filter(event=self.event, is_active=True).order_by('name')
+        if not has_pos_permission(request.user, self.event, 'can_session_control_pos'):
+            registers = registers.filter(cash_sessions__status=BetterposCashSession.STATUS_OPEN).distinct()
         return JsonResponse({
             'registers': [
                 {
